@@ -1,5 +1,5 @@
 # Sets the minimum version of CMake required to build the native library.
-cmake_minimum_required(VERSION 3.19)
+cmake_minimum_required(VERSION 3.11)
 
 # Declare and name the project.
 project(secp256k1 LANGUAGES C CXX)
