@@ -10,19 +10,19 @@ set(CMAKE_CXX_STANDARD 17)
 # Option to build unit tests
 option(BUILD_TESTS "Build unit tests" OFF)
 
-# Include https://github.com/bitcoin-core/secp256k1
-# The included directory is set to the root instead of the
-# typicall "secp256k1/include" directory with all header files
-# since, secp256k1.c uses include paths like "include/secp256k1.h"
-include_directories(ext/secp256k1 ext/secp256k1/src)
-
 # Collect source files from https://github.com/bitcoin-core/secp256k1
 file(GLOB_RECURSE SOURCE_FILES CONFIGURE_DEPENDS ext/secp256k1/include/*.h ext/secp256k1/src/*.h ext/secp256k1/src/secp256k1.c)
 
 # Add source files and build a static library
 add_library(secp256k1 STATIC library.cpp library.h bridge.cpp bridge.h encoding.cpp encoding.h ${SOURCE_FILES})
 
-# Specify compile definitions used to build the library # USE_ECMULT_STATIC_PRECOMPUTATION
+# Include https://github.com/bitcoin-core/secp256k1
+# The included directory is set to the root instead of the
+# typicall "secp256k1/include" directory with all header files
+# since, secp256k1.c uses include paths like "include/secp256k1.h"
+target_include_directories(secp256k1 PUBLIC ext/secp256k1 ext/secp256k1/src)
+
+# Specify compile definitions used to build the library
 target_compile_definitions(
         secp256k1
 
