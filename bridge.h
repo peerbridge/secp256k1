@@ -32,6 +32,15 @@ static KeyPair createKeyPair();
 static const unsigned char* computePublicKey(const secp256k1::ByteArray &key, const secp256k1::PublicKeyLength &length = secp256k1::PublicKeyLength::Compressed);
 
 /**
+ * Compute an EC Diffie-Hellman secret in constant time
+ *
+ * @param privateKey - the private key, which is used as a 32-byte scalar with which to multiply the point
+ * @param publicKey - the public key, to compute the secret with
+ * @return a 32-byte vector containing the ECDH secret computed from the point and scalar
+ */
+static const unsigned char* computeSecret(const secp256k1::ByteArray &privateKey, const secp256k1::ByteArray &publicKey);
+
+/**
  * Sign creates a recoverable ECDSA signature.
  * The produced signature is in the 65-byte [R || S || V] format where V is 0 or 1.
  *

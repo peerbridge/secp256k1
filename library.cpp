@@ -43,6 +43,18 @@ std::unique_ptr<secp256k1::ByteArray> secp256k1::Encryption::computePublicKey(co
     return std::make_unique<secp256k1::ByteArray>(out);
 }
 
+std::unique_ptr<secp256k1::ByteArray> secp256k1::Encryption::computeSecret(const secp256k1::ByteArray &privateKey, const secp256k1::ByteArray &publicKey) {
+    secp256k1_pubkey pk;
+    if (!secp256k1_ec_pubkey_parse(ctx, &pk, publicKey.data(), publicKey.size())) return nullptr;
+
+    auto&& len = size_t(secp256k1::SecretLength);
+    secp256k1::ByteArray out(len);
+
+    if(!secp256k1_ecdh(ctx, out.data(), &pk, privateKey.data(), secp256k1_ecdh_hash_function_sha256, nullptr)) return nullptr;
+
+    return std::make_unique<secp256k1::ByteArray>(out);
+}
+
 std::unique_ptr<secp256k1::ByteArray> secp256k1::Encryption::sign(const secp256k1::ByteArray &msg, const secp256k1::ByteArray &key) {
     if (msg.size() != secp256k1::MessageLength) return nullptr;
     if (key.size() != secp256k1::PrivateKeyLength) return nullptr;

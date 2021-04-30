@@ -19,6 +19,11 @@ namespace secp256k1 {
     constexpr inline static int8_t PrivateKeyLength = 32;
 
     /**
+     * Number of Bytes in a ECDH secret.
+     */
+    constexpr inline static int8_t SecretLength = 32;
+
+    /**
      * Number of Bytes in a ECDSA signature (excluding a recovery ID)
      */
     constexpr inline static int8_t SignatureLength = 64;
@@ -71,6 +76,15 @@ namespace secp256k1 {
          * @return the public key encoded according to the given length
          */
         std::unique_ptr<ByteArray> computePublicKey(const secp256k1::ByteArray &key, const PublicKeyLength &length = PublicKeyLength::Compressed);
+
+        /**
+         * Compute an EC Diffie-Hellman secret in constant time
+         *
+         * @param privateKey - the private key, which is used as a 32-byte scalar with which to multiply the point
+         * @param publicKey - the public key, to compute the secret with
+         * @return a 32-byte vector containing the ECDH secret computed from the point and scalar
+         */
+        std::unique_ptr<secp256k1::ByteArray> computeSecret(const secp256k1::ByteArray &privateKey, const secp256k1::ByteArray &publicKey);
 
         /**
          * Sign creates a recoverable ECDSA signature.

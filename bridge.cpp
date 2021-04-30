@@ -13,6 +13,10 @@ const unsigned char* computePublicKey(const secp256k1::ByteArray &key, const sec
     return secp256k1::Encryption::getInstance().computePublicKey(key, length)->data();
 }
 
+const unsigned char* computeSecret(const secp256k1::ByteArray &privateKey, const secp256k1::ByteArray &publicKey) {
+    return secp256k1::Encryption::getInstance().computeSecret(privateKey, publicKey)->data();
+}
+
 const unsigned char* sign(const secp256k1::ByteArray &msg, const secp256k1::ByteArray &key) {
     return secp256k1::Encryption::getInstance().sign(msg, key)->data();
 }
