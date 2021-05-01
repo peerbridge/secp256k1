@@ -17,6 +17,23 @@ TEST(EncryptionTest, ComputePublicKey) {
     }
 }
 
+TEST(EncryptionTest, ComputeSecret) {
+    const std::string privateKeyHex = "a32da27d8aff2bcfd159e6a61d9fe13da6cf426bf19c7feb2b4e0d0d914d4d06";
+    const secp256k1::ByteArray privateKey = encoding::hex::DecodeString(privateKeyHex);
+
+    const std::string publicKeyHex = "0300db96ed8ea9e16350a16a7d01126ce6f00e6917cd4b2e70f838d159f653b510";
+    const secp256k1::ByteArray publicKey = encoding::hex::DecodeString(publicKeyHex);
+
+    const std::string secretHex = "985506da2199a728043f716f06961411969b79368fd2a621b99f03d07bf6c986";
+    const secp256k1::ByteArray secret = encoding::hex::DecodeString(secretHex);
+
+    const std::unique_ptr<secp256k1::ByteArray> sec = secp256k1::Encryption::getInstance().computeSecret(privateKey, publicKey);
+    EXPECT_EQ(secret.size(), sec->size());
+    for (std::size_t i = 0; i < secret.size(); ++i) {
+        EXPECT_EQ(secret[i], (*sec)[i]);
+    }
+}
+
 TEST(EncryptionTest, Sign) {
     const std::string keyHex = "60f8700baf057e6131b912b97f2e36f54a67544a5f4659de348e988306ab1a3f";
     const secp256k1::ByteArray key = encoding::hex::DecodeString(keyHex);
